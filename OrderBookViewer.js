@@ -3,6 +3,7 @@ const w = new ws('wss://ws-feed.pro.coinbase.com');
 
 let asks = [];
 let bids = [];
+const currencyPair = "BTC-USD";
 
 /**
  * Open a connection to Coinbase and get orderbook data
@@ -11,7 +12,7 @@ w.on('open', () => {
     w.send(JSON.stringify({
         type: 'subscribe',
         product_ids: [
-            "BTC-USD",
+            currencyPair,
         ],
         channels: [
             'level2',
