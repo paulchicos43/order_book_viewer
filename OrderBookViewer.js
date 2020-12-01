@@ -40,7 +40,7 @@ w.on('message', (e) => {
             };
         }
     } else if (parsedMsg.type == "l2update") {
-        if(parsedMsg.changes[0][0] == "buy") { //Bid prices
+        if(parsedMsg.changes[0][0] == "buy") { //Update bid prices
             let bidPriceAffected = Number(parsedMsg.changes[0][1]);
             let newBidQuantity = Number(parsedMsg.changes[0][2]);
             for(let i = 0; i < bids.length; i++) {
@@ -60,7 +60,7 @@ w.on('message', (e) => {
                     break;
                 }
             }
-        } else if (parsedMsg.changes[0][0] == "sell") { //Ask prices
+        } else if (parsedMsg.changes[0][0] == "sell") { //Update ask prices
             let askPriceAffected = Number(parsedMsg.changes[0][1]);
             let newAskQuantity = Number(parsedMsg.changes[0][2]);
             for(let i = 0; i < asks.length; i++) {
@@ -80,7 +80,7 @@ w.on('message', (e) => {
             }
         }
     }
-    console.log(bids);
+    console.log(bids); //Testing
 });
 
 /**
