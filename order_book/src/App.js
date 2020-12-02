@@ -25,10 +25,6 @@ export default function App() {
    */
   const setCurrency = (newCurrency) => {
     setCurrencyPair(newCurrency);
-    asks = [];
-    bids = [];
-    setBidData([]);
-    setAskData([]);
   }
   /**
    * Open the connection to the web socket
@@ -38,8 +34,12 @@ export default function App() {
     ws.current.onclose = () => {
       console.log("CLOSING");
     }
-    return () => { //Close on cleanup
+    return () => { //Close on cleanup. Empty arrays for next change.
       ws.current.close();
+      asks = [];
+      bids = [];
+      setBidData([]);
+      setAskData([]);
     }
   }, [ws, currencyPair]);
 
