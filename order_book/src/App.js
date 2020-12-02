@@ -1,14 +1,15 @@
 import BookColumn from './components/BookColumn';
 import React, { useState, useEffect, useRef } from'react';
-import './App.css';
+import './css/App.css';
 import TradingViewWidget from './components/TradingViewWidget';
+import SelectCurrency from './components/SelectCurrency';
 
 
 
-
-
-function App() {
-  const currencyPair = "ETH-USD";
+/**
+ * Main app interface
+ */
+export default function App() {
   const ws = new useRef(null);
   const [bidData, setBidData] = useState([]);
   const [askData, setAskData] = useState([]);
@@ -16,6 +17,19 @@ function App() {
   let asks = [];
   let bids = [];
   
+  const [currencyPair, setCurrencyPair] = useState("ETH-USD");
+
+  /**
+   * Sets new currency for the app
+   * @param {String} newCurrency is the new currency
+   */
+  const setCurrency = (newCurrency) => {
+    setCurrencyPair(newCurrency);
+    asks = [];
+    bids = [];
+    setBidData([]);
+    setAskData([]);
+  }
   /**
    * Open the connection to the web socket
    */
@@ -27,7 +41,7 @@ function App() {
     return () => { //Close on cleanup
       ws.current.close();
     }
-  }, [ws]);
+  }, [ws, currencyPair]);
 
   /**
    * Maintain the bid and ask price lists
@@ -48,7 +62,7 @@ function App() {
     
     /**
      * Parses message data into order book
-     * @param {*} e is the JSON respose from the websocket. The data we want is located in e.data
+     * @param {JSON} e is the JSON respose from the websocket. The data we want is located in e.data
      */
     ws.current.onmessage = (e) => {
       let parsedMsg = JSON.parse(e.data);
@@ -121,18 +135,19 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Order Book { currencyPair }</h1>
-      <div style = { { display: 'inline-block', 'margin-right': '20%', } }>
-        <BookColumn color = 'green' list = { bidData.slice(0,10) } />
+      <h1 className = "Title">Order Book { currencyPair }</h1>
+      <div>
+        <SelectCurrency setCurrency = { setCurrency } />
       </div>
-      <div style = { { display: 'inline-block' } } >
-        <BookColumn color = 'red' list = { askData.slice(0,10) } />
+      <div className = "LeftColumn">
+        <BookColumn title = "Bids" color = 'white' list = { bidData.slice(0,10) } />
       </div>
-      <div style = {{ 'margin-top': '5%' }}>
+      <div className = "RightColumn">
+        <BookColumn title = "Asks" color = 'white' list = { askData.slice(0,10) } />
+      </div>
+      <div className = "Chart">
         <TradingViewWidget symbol = {"COINBASE:" + currencyPair.split('-')[0] + currencyPair.split('-')[1]} />
       </div>
     </div>
   );
 }
-
-export default App;

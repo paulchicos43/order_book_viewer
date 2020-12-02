@@ -1,0 +1,22 @@
+.App {
+  text-align: center;
+  background-color: #212124;
+  margin: 0px;
+}
+
+.LeftColumn {
+  display: inline-block;
+  margin-right: 28%;
+}
+
+.RightColumn {
+  display: inline-block;
+}
+
+.Chart {
+  margin-top: 3%;
+}
+
+.Title {
+  color: white;
+}
