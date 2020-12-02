@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import BookColumn from './components/BookColumn';
 import React, { useState, useEffect, useRef } from'react';
 import './App.css';
 
@@ -11,6 +11,7 @@ function App() {
   const ws = new useRef(null);
   const [bidData, setBidData] = useState([]);
   const [askData, setAskData] = useState([]);
+  const [tool, setTool] = useState("");
   let asks = [];
   let bids = [];
   
@@ -45,9 +46,12 @@ function App() {
 
     ws.current.onmessage = (e) => {
       let parsedMsg = JSON.parse(e.data);
-      asks = askData;
-      bids = bidData;
-      if(parsedMsg.type == "snapshot") { //Build initial orderbook
+
+      //Deep copy
+      asks = askData.slice();
+      bids = bidData.slice();
+
+      if(parsedMsg.type === "snapshot") { //Build initial orderbook
         for(let ask of parsedMsg.asks) {
             asks[asks.length] = {
                 price: Number(ask[0]),
@@ -61,20 +65,20 @@ function App() {
                 quantity: Number(bid[1]),
             };
         }
-    } else if (parsedMsg.type == "l2update") {
-        if(parsedMsg.changes[0][0] == "buy") { //Update bid prices
+    } else if (parsedMsg.type === "l2update") {
+        if(parsedMsg.changes[0][0] === "buy") { //Update bid prices
             let bidPriceAffected = Number(parsedMsg.changes[0][1]);
             let newBidQuantity = Number(parsedMsg.changes[0][2]);
             for(let i = 0; i < bids.length; i++) {
-                if(bids[i].price == bidPriceAffected && newBidQuantity == 0) { //Eliminate a price
+                if(bids[i].price === bidPriceAffected && newBidQuantity === 0) { //Eliminate a price
 
                     bids.splice(i, 1);
                     break;
-                } else if (bids[i].price == bidPriceAffected && newBidQuantity != 0) { //Update a price
+                } else if (bids[i].price === bidPriceAffected && newBidQuantity !== 0) { //Update a price
 
                     bids[i].quantity = newBidQuantity;
                     break;
-                } else if (bidPriceAffected > bids[i].price && newBidQuantity != 0) { //Insert a price
+                } else if (bidPriceAffected > bids[i].price && newBidQuantity !== 0) { //Insert a price
                     bids.splice(i, 0, {
                         price: bidPriceAffected,
                         quantity: newBidQuantity,
@@ -82,17 +86,17 @@ function App() {
                     break;
                 }
             }
-        } else if (parsedMsg.changes[0][0] == "sell") { //Update ask prices
+        } else if (parsedMsg.changes[0][0] === "sell") { //Update ask prices
             let askPriceAffected = Number(parsedMsg.changes[0][1]);
             let newAskQuantity = Number(parsedMsg.changes[0][2]);
             for(let i = 0; i < asks.length; i++) {
-                if(asks[i].price == askPriceAffected && newAskQuantity == 0) { //Eliminate a price
+                if(asks[i].price === askPriceAffected && newAskQuantity === 0) { //Eliminate a price
                     asks.splice(i, 1);
                     break;
-                } else if (asks[i].price == askPriceAffected && newAskQuantity != 0) { //Update a price
+                } else if (asks[i].price === askPriceAffected && newAskQuantity !== 0) { //Update a price
                     asks[i].quantity = newAskQuantity;
                     break;
-                } else if (askPriceAffected < asks[i].price && newAskQuantity != 0) { //Insert a price
+                } else if (askPriceAffected < asks[i].price && newAskQuantity !== 0) { //Insert a price
                     asks.splice(i, 0, {
                         price: askPriceAffected,
                         quantity: newAskQuantity,
@@ -104,8 +108,10 @@ function App() {
     }
     setBidData(bids);
     setAskData(asks);
+    
+    setTool("");
     }
-  }, [bidData,askData,asks,bids,ws]);
+  }, [tool,asks,bids,ws]);
 
 
   const disp = () => {
@@ -113,21 +119,8 @@ function App() {
   }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <button onClick = {disp}>PRESS</button>
-      </header>
+      <BookColumn list = { bidData.slice(0,20) } />
+      <BookColumn list = { askData.slice(0,20) } />
     </div>
   );
 }
