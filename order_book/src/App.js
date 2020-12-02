@@ -105,11 +105,11 @@ function App() {
                 }
             }
         }
-    }
-    setBidData(bids);
-    setAskData(asks);
-    
-    setTool("");
+      }
+      setBidData(bids);
+      setAskData(asks);
+      
+      setTool("");
     }
   }, [tool,asks,bids,ws]);
 
@@ -119,8 +119,13 @@ function App() {
   }
   return (
     <div className="App">
-      <BookColumn list = { bidData.slice(0,20) } />
-      <BookColumn list = { askData.slice(0,20) } />
+      <h1>Order Book { currencyPair }</h1>
+      <div style = { { display: 'inline-block', 'margin-right': '10%', } }>
+        <BookColumn color = 'green' list = { bidData.slice(0,20) } />
+      </div>
+      <div style = { { display: 'inline-block' } } >
+        <BookColumn color = 'red' list = { askData.slice(0,20) } />
+      </div>
     </div>
   );
 }

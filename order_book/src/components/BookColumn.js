@@ -3,12 +3,12 @@ import React from'react';
 
 export default function BookColumn(props) {
     let output = props.list.map(item => (
-        <p>{ item.price } { item.quantity }</p>
+        <p style = { { color: props.color } }>{ item.price.toFixed(5) } { item.quantity.toFixed(8) }</p>
     ));
 
     return (
-        <div style = { { display: 'inline-block' } }>
+        <>
             { output }
-        </div>
+        </>
     );
 }
