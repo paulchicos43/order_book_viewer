@@ -3,7 +3,7 @@ import '../css/SelectCurrency.css';
 
 /**
  * Component for selecting between given currencies
- * @param {*} props contain functions for modifying states of super components
+ * @param {Object} props contain functions for modifying states of super components
  */
 export default function SelectCurrency(props) {
     const [selectedETH, setSelectedETH] = useState(true);
@@ -34,10 +34,10 @@ export default function SelectCurrency(props) {
 
     return (
         <div className = "RadioText">
-            <input onClick = { handleETHClick } checked = { selectedETH } type = "radio" id = "ETH-USD" name = "Currency" value = "ETH-USD" />
-            <label className = "RadioLabel" for = "ETH-USD">ETH/USD</label>
-            <input onClick = { handleBTCClick } checked = { selectedBTC } type = "radio" id = "BTC-USD" name = "Currency" value = "BTC-USD" />
-            <label for = "BTC-USD">BTC/USD</label>
+            <input onChange = {() => {}} onClick = { handleETHClick } checked = { selectedETH } type = "radio" id = "ETH-USD" name = "Currency" value = "ETH-USD" />
+            <label className = "RadioLabel" htmlFor = "ETH-USD">ETH/USD</label>
+            <input onChange = {() => {}} onClick = { handleBTCClick } checked = { selectedBTC } type = "radio" id = "BTC-USD" name = "Currency" value = "BTC-USD" />
+            <label htmlFor = "BTC-USD">BTC/USD</label>
         </div>
     );
 }

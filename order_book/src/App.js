@@ -26,6 +26,7 @@ export default function App() {
   const setCurrency = (newCurrency) => {
     setCurrencyPair(newCurrency);
   }
+  
   /**
    * Open the connection to the web socket
    */
@@ -139,11 +140,13 @@ export default function App() {
       <div>
         <SelectCurrency setCurrency = { setCurrency } />
       </div>
-      <div className = "LeftColumn">
-        <BookColumn title = "Bids" color = 'white' list = { bidData.slice(0,10) } />
-      </div>
-      <div className = "RightColumn">
-        <BookColumn title = "Asks" color = 'white' list = { askData.slice(0,10) } />
+      <div className = "Columns">
+        <div className = "LeftColumn">
+          <BookColumn title = "Bids" color = 'white' list = { bidData.slice(0,10) } />
+        </div>
+        <div className = "RightColumn">
+          <BookColumn title = "Asks" color = 'white' list = { askData.slice(0,10) } />
+        </div>
       </div>
       <div className = "Chart">
         <TradingViewWidget symbol = {"COINBASE:" + currencyPair.split('-')[0] + currencyPair.split('-')[1]} />

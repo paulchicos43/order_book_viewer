@@ -1,6 +1,8 @@
 const ws = require('ws');
 const w = new ws('wss://ws-feed.pro.coinbase.com');
 
+
+
 let asks = [];
 let bids = [];
 const currencyPair = "BTC-USD";
@@ -80,7 +82,6 @@ w.on('message', (e) => {
             }
         }
     }
-    console.log(bids); //Testing
 });
 
 /**
@@ -89,3 +90,4 @@ w.on('message', (e) => {
 w.on('error', (e) => {
     console.log(e);
 });
+

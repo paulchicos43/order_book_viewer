@@ -6,7 +6,6 @@ import '../css/BookColumn.css';
  * @param {Object} props 
  */
 export default function BookColumn(props) {
-    
     let output = props.list.map(item => (
         <div>
             <p className = "Item">
