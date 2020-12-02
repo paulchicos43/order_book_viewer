@@ -1,13 +1,14 @@
 import BookColumn from './components/BookColumn';
 import React, { useState, useEffect, useRef } from'react';
 import './App.css';
+import TradingViewWidget from './components/TradingViewWidget';
 
 
 
 
 
 function App() {
-  const currencyPair = "BTC-USD";
+  const currencyPair = "ETH-USD";
   const ws = new useRef(null);
   const [bidData, setBidData] = useState([]);
   const [askData, setAskData] = useState([]);
@@ -44,6 +45,11 @@ function App() {
     }));
     }
 
+    
+    /**
+     * Parses message data into order book
+     * @param {*} e is the JSON respose from the websocket. The data we want is located in e.data
+     */
     ws.current.onmessage = (e) => {
       let parsedMsg = JSON.parse(e.data);
 
@@ -109,22 +115,21 @@ function App() {
       setBidData(bids);
       setAskData(asks);
       
-      setTool("");
+      setTool(""); //Re-render
     }
   }, [tool,asks,bids,ws]);
 
-
-  const disp = () => {
-    console.log(bidData[0]);
-  }
   return (
     <div className="App">
       <h1>Order Book { currencyPair }</h1>
-      <div style = { { display: 'inline-block', 'margin-right': '10%', } }>
-        <BookColumn color = 'green' list = { bidData.slice(0,20) } />
+      <div style = { { display: 'inline-block', 'margin-right': '20%', } }>
+        <BookColumn color = 'green' list = { bidData.slice(0,10) } />
       </div>
       <div style = { { display: 'inline-block' } } >
-        <BookColumn color = 'red' list = { askData.slice(0,20) } />
+        <BookColumn color = 'red' list = { askData.slice(0,10) } />
+      </div>
+      <div style = {{ 'margin-top': '5%' }}>
+        <TradingViewWidget symbol = {"COINBASE:" + currencyPair.split('-')[0] + currencyPair.split('-')[1]} />
       </div>
     </div>
   );
