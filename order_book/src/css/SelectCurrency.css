@@ -1,7 +1,7 @@
 .RadioText {
     color: white;
-}
-
-.RadioLabel {
-    margin-right: 10px;
+    display: flex;
+    justify-content: space-evenly;
+    width: 40%;
+    margin: 0 auto;
 }
